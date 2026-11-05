@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dogdate - дейтинг для собак</title>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf3f2;--win:#fffdfd;--bar:#f1eeee;--ink:#6b5650;--mute:#a8999a;--line:#a8908a;--pink:#fdeaea;--blue:#e3e8fb;--dot:#6b5650;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#241e1f;--win:#2e2627;--bar:#3a3031;--ink:#e8d6d0;--mute:#9a8a8a;--line:#7d6a68;--pink:#43302f;--blue:#2f3550;--dot:#e8d6d0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#241e1f;--win:#2e2627;--bar:#3a3031;--ink:#e8d6d0;--mute:#9a8a8a;--line:#7d6a68;--pink:#43302f;--blue:#2f3550;--dot:#e8d6d0;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center}
+.app{width:100%;max-width:430px;padding:14px 14px 28px}
+h1{font:700 22px "Silkscreen",monospace;margin:4px 4px 12px;display:flex;justify-content:space-between;align-items:center}
+.win{background:var(--win);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin-bottom:14px}
+.bar{background:var(--bar);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:6px;font-size:15px;color:var(--mute)}
+.bar i{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:var(--pink);display:block}
+.bar i:first-child{background:var(--dot)}
+.bar span{flex:1;text-align:center;margin-right:48px}
+.body{padding:16px}
+.me{display:flex;gap:14px;align-items:center}
+.pic{width:92px;height:116px;border:1px solid var(--line);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:54px;flex:none;background:var(--pink)}
+.pic img{width:100%;height:100%;object-fit:cover;border-radius:15px}.photo{display:flex;gap:12px;align-items:center;margin-bottom:6px}.logo{font:700 20px/1.1 "Silkscreen",monospace}
+.logo b{color:#c9778a}
+label{display:block;font-size:13px;color:var(--mute);margin:8px 0 3px}
+input,select,textarea{width:100%;background:var(--pink);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font:inherit;font-size:15px}
+textarea{resize:none;height:70px}
+.tabs{display:flex;background:var(--bar);border-bottom:1px solid var(--line);padding:8px 10px 0;gap:4px}
+.tab{background:none;border:1px solid transparent;border-bottom:0;border-radius:14px 14px 0 0;padding:9px 12px;font:inherit;font-size:15px;color:var(--ink);cursor:pointer;position:relative}
+.tab.on{background:var(--win);border-color:var(--line);top:1px}
+.tab em{font-style:normal;background:#c9778a;color:#fff;border-radius:9px;font-size:11px;padding:1px 6px;margin-left:4px}
+.panel{min-height:430px;padding:16px;display:flex;flex-direction:column}
+.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.title{font-size:22px;margin:0}
+.pill{border:1px solid var(--line);background:var(--blue);color:var(--ink);border-radius:20px;padding:7px 16px;font:inherit;font-size:15px;cursor:pointer}
+.empty{margin:auto;text-align:center;color:var(--mute);font-size:20px;padding:30px 10px}
+.card{border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:4px}
+.hero{height:190px;display:flex;align-items:center;justify-content:center;font-size:104px;border-bottom:1px solid var(--line)}
+.info{padding:12px 14px}
+.info h2{margin:0;font:700 18px "Silkscreen",monospace}
+.info p{margin:6px 0;font-size:14px;line-height:1.4}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tags span{background:var(--blue);border:1px solid var(--line);border-radius:12px;padding:2px 10px;font-size:12px}
+.acts{display:flex;justify-content:center;gap:22px;margin-top:14px}
+.round{width:62px;height:62px;border-radius:50%;border:1px solid var(--line);background:var(--pink);font-size:26px;cursor:pointer;color:var(--ink)}
+.round:active,.pill:active{transform:scale(.94)}
+.item{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:8px;cursor:pointer;background:var(--pink)}
+.item .av{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--win)}
+.item small{display:block;color:var(--mute);font-size:13px;margin-top:2px}
+.chat{flex:1;display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:310px;padding:4px 0}
+.msg{max-width:78%;padding:8px 12px;border-radius:16px;border:1px solid var(--line);font-size:14px;line-height:1.35}
+.msg.me{align-self:flex-end;background:var(--blue)}
+.msg.dog{align-self:flex-start;background:var(--pink)}
+.send{display:flex;gap:8px;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--win);padding:12px 20px;border-radius:20px;font:700 14px "Silkscreen",monospace;z-index:9;opacity:0;pointer-events:none;transition:opacity .25s;text-align:center}
+.toast.show{opacity:1}
+.stats{display:flex;gap:8px;margin-top:10px}
+.stats div{flex:1;text-align:center;border:1px solid var(--line);border-radius:12px;padding:6px;font-size:12px;color:var(--mute)}
+.stats b{display:block;font:700 18px "Silkscreen",monospace;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1><span>dogdate</span><button class="pill" id="theme" aria-label="Тема">◐</button></h1>
+
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i><span id="meTitle">rex/span></div>
+    <div class="body me">
+      <div class="pic" id="mePic">🐕</div>
+      <div style="flex:1;min-width:0">
+        <div class="logo">Dog<b>★</b><br>Date</div>
+        <div class="stats"><div><b id="sLikes">0</b>лайки</div><div><b id="sMatch">0</b>пары</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="tabs" id="tabs"></div>
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DOGS=[
+{n:"josya",b:"corgi",a:2,e:"🐕",c:"#fde4cf",t:["walk","cheese","shorts"],bio:"woof woof",y:1},
+{n:"mika",b:"poodle",a:3,e:"🐩",c:"#f6dcef",t:["grooming","style","spa"],bio:"lovely",y:1},
+{n:"baron",b:"labrador",a:5,e:"🦮",c:"#e8e3c8",t:["swimming","formal","hugs"],bio:"waaa",y:0},
+{n:"luna",b:"husky",a:4,e:"🐺",c:"#dde6f7",t:["snow","howl","marathons"],bio:"singing at night",y:1},
+{n:"charlie",b:"toy terrier",a:1,e:"🐶",c:"#fbe6e6",t:["paws","blanket","sleep"],bio:"tiny",y:1},
+{n:"gray",b:"doberman",a:6,e:"🐕‍🦺",c:"#e4dfe9",t:["guard","discipline","quiet"],bio:"hardworking",y:0},
+{n:"sam",b:"pug",a:3,e:"🐽",c:"#f9ead2",t:["food","sofa","snoring"],bio:"waiting for luv",y:1},
+{n:"rocky",b:"beagle",a:2,e:"🦴",c:"#dff0e4",t:["sniffing","tracks","bones"],bio:"<3",y:1}
+];
+const REPL=["u r my fav","wanna go on a date?","ur pretty","woof!!","hi<3","im gonna give u a paw"];
+const EM=["🐕","🐩","🦮","🐕‍🦺","🐶","🐺","🐽","🦴"];
+const def={me:{n:"jam",b:"goldendoodle",a:3,bio:"luv life",e:"🐕",p:"",t:"sniffing, quiet, sofa"},i:0,likes:0,matches:[],chats:{}};
+let S=def,tab="swipe",open=null;
+try{const r=localStorage.getItem("woof1");if(r)S=Object.assign({},def,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem("woof1",JSON.stringify(S))}catch(e){}}
+const $=id=>document.getElementById(id);
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function toast(t){const el=$("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),1800)}
+function head(){$("meTitle").textContent=(S.me.n||"Pup")+".exe";$("mePic").innerHTML=S.me.p?`<img src="${S.me.p}" alt="">`:S.me.e;$("sLikes").textContent=S.likes;$("sMatch").textContent=S.matches.length}
+function tabs(){
+  const T=[["swipe","Поиск"],["matches","Пары"],["profile","Профиль"]];
+  $("tabs").innerHTML=T.map(([k,l])=>`<button class="tab ${tab===k?"on":""}" data-k="${k}">${l}${k==="matches"&&S.matches.length?`<em>${S.matches.length}</em>`:""}</button>`).join("");
+  $("tabs").querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.k;open=null;render()});
+}
+function swipe(){
+  const d=DOGS[S.i];
+  if(!d)return `<div class="row"><h3 class="title">Поиск</h3></div><div class="empty">Собаки закончились 🐾<br><br><button class="pill" id="reset">Начать заново</button></div>`;
+  return `<div class="row"><h3 class="title">Поиск</h3><span class="pill">${S.i+1} / ${DOGS.length}</span></div>
+  <div class="card"><div class="hero" style="background:${d.c}">${d.e}</div>
+  <div class="info"><h2>${esc(d.n)}, ${d.a}</h2><p><b>${esc(d.b)}</b></p><p>${esc(d.bio)}</p><div class="tags">${d.t.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div></div>
+  <div class="acts"><button class="round" id="no" aria-label="Пропустить">✕</button><button class="round" id="yes" aria-label="Лайк">♥</button></div>`;
+}
+function matches(){
+  if(open!==null){
+    const d=DOGS.find(x=>x.n===open),log=S.chats[open]||[];
+    return `<div class="row"><button class="pill" id="back">←</button><h3 class="title">${d.e} ${esc(d.n)}</h3><span></span></div>
+    <div class="chat" id="chat">${log.length?log.map(m=>`<div class="msg ${m.f}">${esc(m.t)}</div>`).join(""):`<div class="empty" style="font-size:15px">Напиши первым — виляй хвостом!</div>`}</div>
+    <div class="send"><input id="txt" placeholder="Гав-гав…" maxlength="200"><button class="pill" id="go">➤</button></div>`;
+  }
+  return `<div class="row"><h3 class="title">Пары</h3></div>`+(S.matches.length?S.matches.map(n=>{const d=DOGS.find(x=>x.n===n),l=(S.chats[n]||[]).slice(-1)[0];return `<div class="item" data-n="${esc(n)}"><div class="av">${d.e}</div><div><b>${esc(d.n)}</b>, ${d.a}<small>${l?esc(l.t):"Новая пара — напиши!"}</small></div></div>`}).join(""):`<div class="empty">Пока нет пар.<br>Ставь ♥ в поиске</div>`);
+}
+function profile(){
+  const m=S.me;
+  return `<div class="row"><h3 class="title">Мой пёс</h3><button class="pill" id="wipe">Сброс</button></div>
+  <div class="photo"><div class="pic" id="pv">${m.p?`<img src="${m.p}" alt="">`:m.e}</div><div style="min-width:0"><input id="pf" type="file" accept="image/*"><button class="pill" id="pd" style="margin-top:8px">Убрать фото</button></div></div>
+  <label>Кличка</label><input id="pn" maxlength="20" value="${esc(m.n)}">
+  <label>Порода</label><input id="pb" maxlength="30" value="${esc(m.b)}">
+  <div style="display:flex;gap:10px"><div style="flex:1"><label>Возраст</label><input id="pa" type="number" min="0" max="25" value="${esc(m.a)}"></div>
+  <div style="flex:1"><label>Аватар</label><select id="pe">${EM.map(e=>`<option ${e===m.e?"selected":""}>${e}</option>`).join("")}</select></div></div>
+  <label>О себе</label><textarea id="pbio" maxlength="140">${esc(m.bio)}</textarea>
+  <label>Интересы (через запятую)</label><input id="pt" maxlength="60" value="${esc(m.t||"")}">
+  <button class="pill" id="save" style="margin-top:14px;width:100%">Сохранить профиль</button>`;
+}
+function bind(){
+  const g=id=>$(id);
+  if(g("yes"))g("yes").onclick=()=>act(true);
+  if(g("no"))g("no").onclick=()=>act(false);
+  if(g("reset"))g("reset").onclick=()=>{S.i=0;save();render()};
+  if(g("back"))g("back").onclick=()=>{open=null;render()};
+  document.querySelectorAll(".item").forEach(el=>el.onclick=()=>{open=el.dataset.n;render()});
+  if(g("go")){const send=()=>{const v=g("txt").value.trim();if(!v)return;const n=open;(S.chats[n]=S.chats[n]||[]).push({f:"me",t:v});save();render();
+    setTimeout(()=>{(S.chats[n]=S.chats[n]||[]).push({f:"dog",t:REPL[Math.floor(Math.random()*REPL.length)]});save();if(open===n&&tab==="matches")render()},900)};
+    g("go").onclick=send;g("txt").onkeydown=e=>{if(e.key==="Enter")send()};g("txt").focus();
+    const c=g("chat");c.scrollTop=c.scrollHeight}
+  if(g("pn")){let ph=S.me.p||"";
+    const prev=()=>{g("pv").innerHTML=ph?`<img src="${ph}" alt="">`:g("pe").value};
+    g("pe").onchange=prev;
+    g("pd").onclick=()=>{ph="";g("pf").value="";prev()};
+    g("pf").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=300,c=document.createElement("canvas");c.width=c.height=s;const k=Math.max(s/im.width,s/im.height),w=im.width*k,h=im.height*k;c.getContext("2d").drawImage(im,(s-w)/2,(s-h)/2,w,h);ph=c.toDataURL("image/jpeg",.8);prev()};im.src=r.result};r.readAsDataURL(f)};
+    g("save").onclick=()=>{S.me={n:g("pn").value.trim()||"Pup",b:g("pb").value.trim(),a:g("pa").value,bio:g("pbio").value.trim(),e:g("pe").value,p:ph,t:g("pt").value.trim()};save();head();toast("Профиль сохранён ♥")}}
+  if(g("wipe"))g("wipe").onclick=()=>{if(confirm("Сбросить все данные?")){S=JSON.parse(JSON.stringify(def));save();tab="swipe";render()}};
+}
+function act(like){
+  const d=DOGS[S.i];if(!d)return;
+  if(like){S.likes++;if(d.y&&!S.matches.includes(d.n)){S.matches.push(d.n);toast("It’s a match! ♥ "+d.n)}else toast("Лайк отправлен 🐾")}
+  S.i++;save();render();
+}
+function render(){head();tabs();$("panel").innerHTML=tab==="swipe"?swipe():tab==="matches"?matches():profile();bind()}
+$("theme").onclick=()=>{const r=document.documentElement,dark=getComputedStyle(r).colorScheme==="dark";r.dataset.theme=dark?"light":"dark"};
+render();
+</script>
+</body>
+</html>
